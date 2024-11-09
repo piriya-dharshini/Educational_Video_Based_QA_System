@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import os
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAsRbKuPIShShp1SulXg7PLnhmCyzcjgaM"
 
 # Function to extract YouTube video ID from the URL
 def get_video_id(url):

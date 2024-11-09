@@ -12,7 +12,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAsRbKuPIShShp1SulXg7PLnhmCyzcjgaM"
+os.environ["GOOGLE_API_KEY"] = "Your api key"
 
 
 app = FastAPI(
@@ -78,7 +78,7 @@ async def qa_endpoint(data: QAInput):
     
     # Process the question using the rag_chain
     response = rag_chain.invoke({"input": data.input})
-    
+
         
     return {"answer": response["answer"]}
 

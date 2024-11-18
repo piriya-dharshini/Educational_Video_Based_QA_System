@@ -1,1 +1,1 @@
-import langchain_chroma
+model="models/embedding-001"

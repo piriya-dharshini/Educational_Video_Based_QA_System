@@ -5,3 +5,5 @@ python-dotenv
 langserve
 fastapi
 uvicorn
+requests
+streamlit

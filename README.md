@@ -5,5 +5,9 @@ This project aims to enhance video-based learning by creating a system that deli
 
 
 **ARCHITECTURE**:
+
+
+
+
 ![arch](https://github.com/user-attachments/assets/ef7f032b-2cdd-4113-80d0-6f7cb4c734f8)
 

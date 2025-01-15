@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from langchain_chroma import Chroma
-from langserve import add_routes
 import uvicorn
 import os
 from langchain_community.document_loaders import YoutubeLoader
@@ -11,8 +10,10 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from fastapi.responses import HTMLResponse
 
-os.environ["GOOGLE_API_KEY"] = "your api key"
+
+os.environ["GOOGLE_API_KEY"] = "AIzaSyAsRbKuPIShShp1SulXg7PLnhmCyzcjgaM"
 
 
 app = FastAPI(
@@ -25,6 +26,9 @@ app = FastAPI(
 class QAInput(BaseModel):
     youtube_url: str  # Expecting a YouTube URL
     input: str  # Expecting a single input field named 'input'
+
+class QuizInput(BaseModel):
+    youtube_url: str
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-pro",
@@ -80,6 +84,41 @@ async def qa_endpoint(data: QAInput):
     response = rag_chain.invoke({"input": data.input})
         
     return {"answer": response["answer"]}
+
+
+def generate_quiz_questions(transcripts):
+    context = "\n".join([doc.page_content for doc in transcripts])
+    prompt = (
+        """Using the provided video transcript, generate 5 multiple-choice quiz questions. 
+        Generate a list of three dictionaries, each representing a quiz question. Each dictionary should have the following keys:
+        - "question": A string representing the quiz question.
+        - "options": A list of four options (strings) for the answer choices.
+        - "answer": A string representing the correct option from the list of options.
+        "Here is the video transcript: \n""" + context
+    )
+    response = llm.invoke(prompt)
+    print(response)
+    return response
+
+def trans_youtube_video(youtube_url: str):
+    loader = YoutubeLoader.from_youtube_url(youtube_url, add_video_info=False)
+    trans = loader.load()
+    return trans
+# Endpoint to generate quiz questions
+@app.post("/generate_quiz_questions")
+async def generate_quiz(data:QuizInput):
+    try:
+        # Index the YouTube video
+        transcripts = trans_youtube_video(data.youtube_url)
+        print(transcripts)
+        # Generate quiz questions using the LLM
+        quiz_questions = generate_quiz_questions(transcripts)
+        print(quiz_questions)
+        return {"questions": quiz_questions}
+
+    except Exception as e:
+        return {"error": str(e)}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=8000)

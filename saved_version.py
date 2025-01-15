@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 import os
+import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Function to extract YouTube video ID from the URL
 def get_video_id(url):
@@ -13,6 +15,7 @@ def get_video_id(url):
         return url.split('/')[-1]
     return None
 
+
 # Set up Streamlit page title and layout
 st.set_page_config(page_title="Smart Video Q&A", layout="wide")
 st.title("🎓 Smart Video Q&A")
@@ -22,7 +25,7 @@ st.subheader("Ask questions about any YouTube video!")
 youtube_url = st.text_input("Enter YouTube Video URL:", "")
 user_query = st.text_input("What would you like to know?", "")
 
-# Button to submit the question
+# Button to submit the question and get the answer
 if st.button("Get Answer"):
     if youtube_url and user_query:
         # Extract video ID and generate thumbnail URL
@@ -37,7 +40,7 @@ if st.button("Get Answer"):
             with col2:
                 st.write("**Your Question:**", user_query)
 
-                # Sending the YouTube link and question to the FastAPI server
+                # Sending the YouTube link and question to the FastAPI server for answer
                 response = requests.post(
                     "http://localhost:8000/qa",
                     json={'youtube_url': youtube_url, 'input': user_query}
@@ -46,17 +49,14 @@ if st.button("Get Answer"):
                 # Display the response
                 if response.status_code == 200:
                     response_json = response.json()
-                    
-                    input_sentence=response_json.get("answer", "No answer found")
                     st.write("**Answer:**", response_json.get("answer", "No answer found"))
-
-                    
                 else:
                     st.write("Error:", response.text)
         else:
             st.write("Invalid YouTube URL. Please try again.")
     else:
         st.write("Please enter both a YouTube URL and a question.") 
+
 
 
 # Customize the appearance of the Streamlit app with royal colors

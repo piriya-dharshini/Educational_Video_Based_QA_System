@@ -1,1 +1,1 @@
-model="models/embedding-001"
+AIzaSyAsRbKuPIShShp1SulXg7PLnhmCyzcjgaM

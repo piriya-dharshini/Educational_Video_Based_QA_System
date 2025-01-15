@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import os
 import pickle
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 def run():
     # Function to extract YouTube video ID from the URL

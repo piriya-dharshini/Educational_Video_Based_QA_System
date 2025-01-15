@@ -13,7 +13,7 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from fastapi.responses import HTMLResponse
 
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAsRbKuPIShShp1SulXg7PLnhmCyzcjgaM"
+os.environ["GOOGLE_API_KEY"] = "your api key"
 
 
 app = FastAPI(

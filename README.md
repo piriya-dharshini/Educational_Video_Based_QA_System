@@ -17,8 +17,8 @@ This project aims to enhance video-based learning by creating a system that deli
 1. Requirements.txt:
 langchain, langchain_openai, langchain_core, python-dotenv, langserve, fastapi, uvicorn, requests, streamlit
 python3 -m pip install requirements.txt
-2.Run the server.py file
-3.Run the client.py file- python3 -m streamlit run client.py
+2. Run the app.py file
+3. Run the homepage.py file- python3 -m streamlit run homepage.py
 
 **OUTPUT**:
 
